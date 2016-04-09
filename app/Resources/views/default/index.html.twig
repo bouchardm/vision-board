@@ -1,0 +1,19 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="container">
+        <h1>Vision - board</h1>
+        <div id="board">
+            board
+        </div>
+        <div id="history">
+            historique
+        </div>
+        <div id="new-vision">
+            <label for="name">Nom: </label><input type="text" id="name">
+            <label for="amount">Quantité: </label><input type="number" id="amount">
+            <label for="reason">Raison: </label><input type="text" id="reason">
+            <button>Ajouter</button>
+        </div>
+    </div>
+{% endblock %}
