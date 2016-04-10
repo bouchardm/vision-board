@@ -15,4 +15,12 @@ class DefaultController extends Controller
     {
         return $this->render('default/index.html.twig');
     }
+
+    /**
+     * @Route("/gestion", name="gestion")
+     */
+    public function gestionAction()
+    {
+        return $this->render('default/gestion.html.twig');
+    }
 }

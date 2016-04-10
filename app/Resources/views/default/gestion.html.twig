@@ -1,0 +1,83 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="container" id="app">
+        <h1>Vision - gestion</h1>
+        <div id="new-vision">
+            <h2>Nouveau point vision</h2>
+            <label for="name">Nom: </label>
+            <input type="text" id="name" v-model="vision.employeeName" class="form-control">
+
+            <label for="amount">Quantité: </label>
+            <input type="number" id="amount" v-model="vision.amount" class="form-control">
+
+            <label for="reason">Raison: </label>
+            <textarea id="reason" v-model="vision.reason" class="form-control"></textarea>
+            <br>
+            <button @click="addVision" class="btn btn-primary">Ajouter</button>
+        </div>
+        <div id="history">
+            <h2>Historique</h2>
+            <ul class="list-group">
+                <li v-for="vision in history" class="list-group-item">
+                    <p>Nom: ${ vision.employeeName }</p>
+                    <p>Quantité: ${ vision.amount }</p>
+                    <p>Raison: ${ vision.reason }</p>
+                    <button class="btn btn-danger" @click="deleteVision(vision.id)">Supprimer</button>
+                </li>
+            </ul>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        Vue.config.delimiters = ['${', '}'];
+        new Vue({
+            el: '#app',
+            data: {
+                history: [],
+                vision: {
+                    employeeName: null,
+                    amount: null,
+                    reason: null
+                }
+            },
+            ready: function() {
+                this.realoadHistory();
+            },
+            methods: {
+                addVision: function() {
+                    var self = this;
+                    $.ajax('/vision/', {
+                        type: "POST",
+                        dataType: 'json',
+                        data: JSON.stringify(this.vision)
+                    }).success(function(data) {
+                        $('#new-vision input').val("");
+                        $('#new-vision textarea').val("");
+                        self.realoadHistory();
+                    });
+                },
+                deleteVision: function(id) {
+                    console.log(id);
+                    var self = this;
+                    $.ajax('/vision/' + id, {
+                        type: 'DELETE'
+                    }).success(function(data) {
+                        self.realoadHistory();
+                    });
+                },
+                realoadHistory: function() {
+                    var self = this;
+                    $.ajax('/vision/', {
+                        type: 'GET',
+                        dataType: 'json'
+                    }).success(function(data) {
+                        self.$set('history', data);
+                    });
+                }
+            }
+        });
+    </script>
+{% endblock %}

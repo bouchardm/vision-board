@@ -5,24 +5,12 @@
         <h1>Vision - board</h1>
         <div id="leaderboard">
             <h2>Leaderboard</h2>
-            <ul>
-                <li v-for="person in leaderboard">
-                    ${ person.employee.employeeName }
-                    ${ person.total_amount }
+            <ul class="list-group">
+                <li v-for="person in leaderboard" class="list-group-item">
+                    <p>Nom: ${ person.employee.employeeName }</p>
+                    <p>Quantité: ${ person.total_amount }</p>
                 </li>
             </ul>
-        </div>
-        <div id="new-vision">
-            <label for="name">Nom: </label>
-            <input type="text" id="name" v-model="vision.employeeName">
-
-            <label for="amount">Quantité: </label>
-            <input type="number" id="amount" v-model="vision.amount">
-
-            <label for="reason">Raison: </label>
-            <input type="text" id="reason" v-model="vision.reason">
-
-            <button @click="addVision">Ajouter</button>
         </div>
     </div>
 {% endblock %}
@@ -34,27 +22,11 @@
             el: '#app',
             data: {
                 leaderboard: [],
-                vision: {
-                    employeeName: null,
-                    amount: null,
-                    reason: null
-                }
             },
             ready: function() {
                 this.realoadLeaderboard();
             },
             methods: {
-                addVision: function() {
-                    var self = this;
-                    $.ajax('/vision/', {
-                        type: "POST",
-                        dataType: 'json',
-                        data: JSON.stringify(this.vision)
-                    }).success(function(data) {
-                        $('#new-vision input').val("");
-                        self.realoadLeaderboard();
-                    });
-                },
                 realoadLeaderboard: function() {
                     var self = this;
                     $.ajax('/vision/leaderboard', {
