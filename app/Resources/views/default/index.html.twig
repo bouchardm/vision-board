@@ -2,13 +2,23 @@
 
 {% block body %}
     <div class="container" id="app">
-        <h1>Vision - board</h1>
+        <h1>Vision - LIBÉO</h1>
         <div id="leaderboard">
-            <h2>Leaderboard</h2>
+            <h2>Classement</h2>
             <ul class="list-group">
                 <li v-for="person in leaderboard" class="list-group-item">
                     <p>Nom: ${ person.employee.employeeName }</p>
                     <p>Quantité: ${ person.total_amount }</p>
+                </li>
+            </ul>
+        </div>
+        <div id="history">
+            <h2>Historique</h2>
+            <ul class="list-group">
+                <li v-for="vision in history" class="list-group-item">
+                    <p>Nom: ${ vision.employeeName }</p>
+                    <p>Quantité: ${ vision.amount }</p>
+                    <p>Raison: ${ vision.reason }</p>
                 </li>
             </ul>
         </div>
@@ -21,10 +31,12 @@
         new Vue({
             el: '#app',
             data: {
-                leaderboard: [],
+                history: [],
+                leaderboard: []
             },
             ready: function() {
                 this.realoadLeaderboard();
+                this.realoadHistory();
             },
             methods: {
                 realoadLeaderboard: function() {
@@ -34,6 +46,15 @@
                         dataType: 'json'
                     }).success(function(data) {
                         self.$set('leaderboard', data);
+                    });
+                },
+                realoadHistory: function() {
+                    var self = this;
+                    $.ajax('/vision/', {
+                        type: 'GET',
+                        dataType: 'json'
+                    }).success(function(data) {
+                        self.$set('history', data);
                     });
                 }
             }

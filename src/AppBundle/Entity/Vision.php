@@ -38,7 +38,7 @@ class Vision
     /**
      * @var string
      *
-     * @ORM\Column(name="reason", type="string", length=255)
+     * @ORM\Column(name="reason", type="text")
      */
     private $reason;
 
