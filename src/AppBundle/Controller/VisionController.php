@@ -51,7 +51,7 @@ class VisionController extends Controller
         $this->getDoctrine()->getManager()->flush();
         return new Response($this->get('serializer')->serialize($vision, 'json'));
     }
-1
+
     /**
      * @Route("/", methods={"GET"})
      */
