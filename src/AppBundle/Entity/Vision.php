@@ -3,8 +3,6 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Serializer\Annotation\Groups;
-use Symfony\Component\Serializer\SerializerInterface;
 
 /**
  * Vision
@@ -27,7 +25,6 @@ class Vision
      * @var string
      *
      * @ORM\Column(name="employee_name", type="string", length=255)
-     * @Groups({"default"})
      */
     private $employeeName;
 

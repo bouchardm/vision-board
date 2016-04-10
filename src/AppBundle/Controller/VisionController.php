@@ -53,12 +53,22 @@ class VisionController extends Controller
     }
 
     /**
-     * @Route("/", methods={"GET"})
+     * @Route("/")
      */
     public function listAction()
     {
         $em = $this->getDoctrine()->getManager();
         $all = $em->getRepository(Vision::class)->findAll();
+        return new Response($this->get('serializer')->serialize($all, 'json'));
+    }
+
+    /**
+     * @Route("/leaderboard")
+     */
+    public function leaderboardAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+        $all = $em->getRepository(Vision::class)->groupByEmployeeName();
         return new Response($this->get('serializer')->serialize($all, 'json'));
     }
 

@@ -1,19 +1,70 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <div class="container">
+    <div class="container" id="app">
         <h1>Vision - board</h1>
-        <div id="board">
-            board
-        </div>
-        <div id="history">
-            historique
+        <div id="leaderboard">
+            <h2>Leaderboard</h2>
+            <ul>
+                <li v-for="person in leaderboard">
+                    ${ person.employee.employeeName }
+                    ${ person.total_amount }
+                </li>
+            </ul>
         </div>
         <div id="new-vision">
-            <label for="name">Nom: </label><input type="text" id="name">
-            <label for="amount">Quantité: </label><input type="number" id="amount">
-            <label for="reason">Raison: </label><input type="text" id="reason">
-            <button>Ajouter</button>
+            <label for="name">Nom: </label>
+            <input type="text" id="name" v-model="vision.employeeName">
+
+            <label for="amount">Quantité: </label>
+            <input type="number" id="amount" v-model="vision.amount">
+
+            <label for="reason">Raison: </label>
+            <input type="text" id="reason" v-model="vision.reason">
+
+            <button @click="addVision">Ajouter</button>
         </div>
     </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        Vue.config.delimiters = ['${', '}'];
+        new Vue({
+            el: '#app',
+            data: {
+                leaderboard: [],
+                vision: {
+                    employeeName: null,
+                    amount: null,
+                    reason: null
+                }
+            },
+            ready: function() {
+                this.realoadLeaderboard();
+            },
+            methods: {
+                addVision: function() {
+                    var self = this;
+                    $.ajax('/vision/', {
+                        type: "POST",
+                        dataType: 'json',
+                        data: JSON.stringify(this.vision)
+                    }).success(function(data) {
+                        $('#new-vision input').val("");
+                        self.realoadLeaderboard();
+                    });
+                },
+                realoadLeaderboard: function() {
+                    var self = this;
+                    $.ajax('/vision/leaderboard', {
+                        type: 'GET',
+                        dataType: 'json'
+                    }).success(function(data) {
+                        self.$set('leaderboard', data);
+                    });
+                }
+            }
+        });
+    </script>
 {% endblock %}
